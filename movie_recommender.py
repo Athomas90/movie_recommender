@@ -10,13 +10,18 @@ def preprocess_movies(file_path):
     df = pd.read_csv(file_path)
     df['release_year'] = pd.to_datetime(df['release_date'], errors='coerce').dt.year
     df['adult'] = df['adult'].astype(str).str.lower().map({'true': 1, 'false': 0})
+    df['production_companies'] = df['production_companies'].fillna('')
+    df['companies_list'] = df['production_companies'].apply(lambda x: [c.strip() for c in x.split(',')])
+    all_companies = set(c for sublist in df['companies_list'] for c in sublist)
+    for company in all_companies:
+        df[company] = df['companies_list'].apply(lambda c_list: int(company in c_list))
     df['genres'] = df['genres'].fillna('')
     df['genres_list'] = df['genres'].apply(lambda x: [g.strip() for g in x.split(',')])
     all_genres = set(genre for sublist in df['genres_list'] for genre in sublist)
     for genre in all_genres:
         df[genre] = df['genres_list'].apply(lambda g_list: int(genre in g_list))
     feature_cols = ['vote_average', 'vote_count', 'revenue', 'budget', 'runtime',
-                    'popularity', 'release_year', 'adult'] + list(all_genres)
+                    'popularity', 'release_year', 'adult'] + list(all_genres) + list(all_companies)
     df_model = df[feature_cols].dropna()
     scaler = MinMaxScaler()
     scaled = scaler.fit_transform(df_model)
