@@ -11,6 +11,8 @@ def preprocess_movies(file_path):
     df['release_year'] = pd.to_datetime(df['release_date'], errors='coerce').dt.year
     df['adult'] = df['adult'].astype(str).str.lower().map({'true': 1, 'false': 0})
     df['production_companies'] = df['production_companies'].fillna('')
+    df['production_companies'] = df['production_companies'].fillna('')
+    # One-hot encode production companies
     df['companies_list'] = df['production_companies'].apply(lambda x: [c.strip() for c in x.split(',')])
     all_companies = set(c for sublist in df['companies_list'] for c in sublist)
     for company in all_companies:
