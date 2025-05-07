@@ -8,7 +8,6 @@ import random
 # --- Load and prepare the dataset ---
 def preprocess_movies(file_path):
     df = pd.read_csv(file_path)
-    df['adult'] = df['adult'].astype(str).str.lower().map({'true': 1, 'false': 0})
     df['production_companies'] = df['production_companies'].fillna('')
     df['production_companies'] = df['production_companies'].fillna('')
     # One-hot encode production companies
