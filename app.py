@@ -23,7 +23,4 @@ if title:
         recs = recommend_by_title(title, df)
         for r in recs:
             st.markdown(f"- {r}")
-    elif mode == "Random":
-        recs = random_recommendations(df, exclude_title=title)
-        for r in recs:
-            st.markdown(f"- {r}")
+
